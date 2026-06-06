@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Happy Birthday Dad</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#000000,#081b3a,#000000);
+    height:100vh;
+    overflow:hidden;
+    color:white;
+}
+
+/* Floating Background */
+
+.particles{
+    position:fixed;
+    width:100%;
+    height:100%;
+    z-index:0;
+}
+
+.particles span{
+    position:absolute;
+    border-radius:50%;
+    background:#4da6ff;
+    animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(100vh);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-100px);
+        opacity:0;
+    }
+}
+
+/* Gift Screen */
+
+.gift-screen{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    z-index:1;
+}
+
+.gift-screen h1{
+    color:#4da6ff;
+    font-size:3rem;
+    text-align:center;
+    text-shadow:0 0 20px #4da6ff;
+}
+
+.gift-screen p{
+    font-size:1.2rem;
+}
+
+/* 3D Gift */
+
+.gift-container{
+    perspective:1000px;
+    cursor:pointer;
+}
+
+.gift{
+    width:180px;
+    height:180px;
+    position:relative;
+    transform-style:preserve-3d;
+    animation:giftFloat 3s ease-in-out infinite;
+}
+
+.box{
+    position:absolute;
+    width:180px;
+    height:120px;
+    bottom:0;
+    border-radius:10px;
+    background:linear-gradient(145deg,#0d47a1,#1976d2);
+}
+
+.lid{
+    position:absolute;
+    width:200px;
+    height:50px;
+    left:-10px;
+    top:15px;
+    border-radius:10px;
+    background:linear-gradient(145deg,#42a5f5,#64b5f6);
+    transition:1s;
+    transform-origin:bottom center;
+}
+
+.ribbon-v{
+    position:absolute;
+    width:20px;
+    height:180px;
+    left:80px;
+    background:white;
+    z-index:2;
+}
+
+.ribbon-h{
+    position:absolute;
+    width:180px;
+    height:20px;
+    top:55px;
+    background:white;
+    z-index:2;
+}
+
+.open .lid{
+    transform:
+        translateY(-100px)
+        rotateX(-140deg)
+        rotateZ(10deg);
+}
+
+@keyframes giftFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+}
+
+/* Birthday Card */
+
+.surprise-screen{
+    display:none;
+    position:absolute;
+    width:100%;
+    height:100%;
+    justify-content:center;
+    align-items:center;
+    z-index:2;
+}
+
+.card{
+    width:420px;
+    max-width:90%;
+    padding:30px;
+    text-align:center;
+    border-radius:25px;
+
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    box-shadow:
+    0 0 25px rgba(77,166,255,0.5);
+
+    animation:showCard 1s ease;
+}
+
+@keyframes showCard{
+    from{
+        transform:scale(0);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.card img{
+    width:240px;
+    height:240px;
+    object-fit:cover;
+    border-radius:50%;
+    border:6px solid #4da6ff;
+
+    box-shadow:
+    0 0 20px #4da6ff,
+    0 0 40px #4da6ff;
+}
+
+.card h2{
+    margin-top:20px;
+    color:#4da6ff;
+    min-height:60px;
+}
+
+.card p{
+    margin-top:15px;
+    line-height:1.8;
+    font-size:1rem;
+}
+
+.signature{
+    margin-top:20px;
+    color:#4da6ff;
+    font-weight:700;
+}
+
+</style>
+</head>
+<body>
+
+<div class="particles"></div>
+
+<!-- Gift Screen -->
+
+<div class="gift-screen" id="giftScreen">
+
+    <h1>🎉 Happy Birthday Dad 🎉</h1>
+
+    <p>Click the gift box to open your surprise</p>
+
+    <div class="gift-container" id="giftBox">
+
+        <div class="gift">
+
+            <div class="lid"></div>
+
+            <div class="box"></div>
+
+            <div class="ribbon-v"></div>
+
+            <div class="ribbon-h"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Surprise Screen -->
+
+<div class="surprise-screen" id="surpriseScreen">
+
+    <div class="card">
+
+        <!-- Dad's Photo -->
+        <img src="dad.jpg" alt="Dad Photo">
+
+        <h2 id="typing"></h2>
+
+        <p>
+            Dear Dad,<br><br>
+
+            Thank you for your love, support and guidance.
+            You have always been my biggest inspiration
+            and strongest support.
+
+            May this birthday bring you happiness,
+            good health and endless success.
+
+            Wishing you a wonderful year ahead filled
+            with joy and beautiful memories.
+        </p>
+
+        <div class="signature">
+            ❤️ Love You Dad ❤️
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* Floating Particles */
+
+const particles = document.querySelector(".particles");
+
+for(let i=0;i<60;i++){
+
+    let p = document.createElement("span");
+
+    p.style.left = Math.random()*100 + "%";
+
+    let size = Math.random()*8 + 4;
+
+    p.style.width = size + "px";
+    p.style.height = size + "px";
+
+    p.style.animationDuration =
+    (Math.random()*5+5)+"s";
+
+    particles.appendChild(p);
+}
+
+/* Gift Open */
+
+const giftBox = document.getElementById("giftBox");
+const giftScreen = document.getElementById("giftScreen");
+const surpriseScreen = document.getElementById("surpriseScreen");
+
+giftBox.addEventListener("click",()=>{
+
+    document
+    .querySelector(".gift")
+    .classList.add("open");
+
+    setTimeout(()=>{
+
+        giftScreen.style.display="none";
+        surpriseScreen.style.display="flex";
+
+        typeWriter();
+        confetti();
+
+    },1200);
+
+});
+
+/* Typing Effect */
+
+const text = "Happy Birthday Papa ❤️";
+let index = 0;
+
+function typeWriter(){
+
+    const target =
+    document.getElementById("typing");
+
+    function type(){
+
+        if(index < text.length){
+
+            target.innerHTML +=
+            text.charAt(index);
+
+            index++;
+
+            setTimeout(type,100);
+        }
+    }
+
+    type();
+}
+
+/* Confetti */
+
+function confetti(){
+
+    for(let i=0;i<150;i++){
+
+        const c =
+        document.createElement("div");
+
+        c.style.position="fixed";
+        c.style.left=
+        Math.random()*100+"vw";
+
+        c.style.top="-20px";
+
+        c.style.width="10px";
+        c.style.height="10px";
+
+        c.style.borderRadius="50%";
+
+        const colors=[
+        "#4da6ff",
+        "#ffffff",
+        "#00d4ff"
+        ];
+
+        c.style.background=
+        colors[Math.floor(Math.random()*3)];
+
+        document.body.appendChild(c);
+
+        const animation=
+        c.animate([
+        {
+            transform:
+            "translateY(0) rotate(0deg)"
+        },
+        {
+            transform:
+            `translateY(${window.innerHeight}px)
+             rotate(720deg)`
+        }
+        ],
+        {
+            duration:
+            3000+Math.random()*3000
+        });
+
+        animation.onfinish=()=>{
+            c.remove();
+        };
+    }
+}
+
+</script>
+
+</body>
+</html>
